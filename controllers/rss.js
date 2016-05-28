@@ -79,17 +79,9 @@ exports.getUserRss = (req, res, next) => {
     console.log('parentId', parentId);
 
     feed = new Feed({
-        title:          'My Feed Title',
-        description:    'This is my personnal feed!',
-        link:           'http://example.com/',
-        image:          'http://example.com/logo.png',
-        copyright:      'Copyright © 2013 John Doe. All rights reserved',
-
-        author: {
-            name:       'John Doe',
-            email:      'john.doe@example.com',
-            link:       'https://example.com/john-doe'
-        }
+        title:          'PutRss',
+        description:    'Rss feed of your Put.io folder',
+        link:           req.protocol + '://' + req.get('host'),
     });
 
     getChildrenFiles(parentId, token.accessToken, feed).then(function() {
