@@ -5,6 +5,7 @@ const validator = require('validator');
 var request = require('request-promise');
 const cheerio = require('cheerio');
 var Feed = require('feed');
+const User = require('../models/User');
 
 var feed;
 
@@ -43,11 +44,12 @@ exports.getFiles = (req, res, next) => {
         }
         files.push(file);
       }).then(function() {
+        console.log(req.user);
         res.render('files/list', {
           title: 'My Files',
           files: files,
           parent: data.parent,
-          rssUrl: req.protocol + '://' + req.get('host') + '/rss/' + data.parent.id,
+          rssUrl: req.protocol + '://' + req.get('host') + '/rss/' + req.user._id + '/' + data.parent.id,
         });
       });
     }).catch(function(error) {
@@ -65,28 +67,38 @@ exports.getFiles = (req, res, next) => {
  */
 exports.getUserRss = (req, res, next) => {
   var parentId = req.params.parentId;
-  console.log('parentId', parentId);
-  const token = req.user.tokens.find(token => token.kind === 'putio');
+  var id = req.params.id;
 
-  feed = new Feed({
-      title:          'My Feed Title',
-      description:    'This is my personnal feed!',
-      link:           'http://example.com/',
-      image:          'http://example.com/logo.png',
-      copyright:      'Copyright © 2013 John Doe. All rights reserved',
+  User.findOne({ _id: id }, (err, user) => {
+    if (!user) {
+      return res.status('404').end();
+    }
 
-      author: {
-          name:       'John Doe',
-          email:      'john.doe@example.com',
-          link:       'https://example.com/john-doe'
-      }
+    const token = user.tokens.find(token => token.kind === 'putio');
+
+    console.log('parentId', parentId);
+
+    feed = new Feed({
+        title:          'My Feed Title',
+        description:    'This is my personnal feed!',
+        link:           'http://example.com/',
+        image:          'http://example.com/logo.png',
+        copyright:      'Copyright © 2013 John Doe. All rights reserved',
+
+        author: {
+            name:       'John Doe',
+            email:      'john.doe@example.com',
+            link:       'https://example.com/john-doe'
+        }
+    });
+
+    getChildrenFiles(parentId, token.accessToken, feed).then(function() {
+      res.set('Content-Type', 'text/xml');
+
+      res.send(feed.render('rss-2.0'));
+    });
   });
 
-  getChildrenFiles(parentId, token.accessToken, feed).then(function() {
-    res.set('Content-Type', 'text/xml');
-
-    res.send(feed.render('rss-2.0'));
-  });
 };
 
 function getChildrenFiles(parentId, token, feed) {

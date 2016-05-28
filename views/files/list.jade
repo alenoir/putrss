@@ -7,7 +7,7 @@ block content
   div
     h4 Rss link
     .input-group
-      input(type="text" class="form-control" value=rssUrl)
+      input(type="text" class="form-control" value=rssUrl onFocus="this.select()" onClick="this.select()" readonly)
       span.input-group-btn
         a(class="btn btn-default" type="button" href=rssUrl target='_blank') Go! 
           i(aria-hidden="true" class=['fa', 'fa-rss-square'])
