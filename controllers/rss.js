@@ -103,7 +103,7 @@ function getChildrenFiles(parentId, token, feed) {
         feed.addItem({
             title:          file.name,
             link:           downloadUrl,
-            image:          file.screenshot,
+          //  image:          file.screenshot,
             date:           new Date(file.created_at)
         });
         break;
