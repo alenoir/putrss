@@ -1,0 +1,20 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 Folder : #{parent.name} 
+
+  div
+    h4 Rss link
+    .input-group
+      input(type="text" class="form-control" value=rssUrl)
+      span.input-group-btn
+        a(class="btn btn-default" type="button" href=rssUrl target='_blank') Go! 
+          i(aria-hidden="true" class=['fa', 'fa-rss-square'])
+  br
+  h4 Files
+  .list-group
+    each file, index in files
+      a(href='/files/'+file.id disabled=file.disabled).list-group-item
+        i(aria-hidden="true" class=['fa', file.icon])
+        = file.name

@@ -54,15 +54,17 @@ passport.use('putio', new OAuth2Strategy({
 }, (accessToken, refreshToken, profile, done) => {
 
   request.get({ url: 'https://api.put.io/v2/account/info', qs: { oauth_token: accessToken }, json: true }, (err, request, body) => {
+    console.log(body);
     var account = body.info;
-    User.findOne({ facebook: account.user_id }, (err, existingUser) => {
+    User.findOne({ putio: account.user_id }, (err, existingUser) => {
       if (existingUser) {
         return done(null, existingUser);
       }
       User.findOne({ email: account.mail }, (err, existingEmailUser) => {
+        console.log(existingEmailUser);
         if (existingEmailUser) {
-          req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
-          done(err);
+          //req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
+          return done(null, existingEmailUser);
         } else {
           const user = new User();
           user.email = account.mail;
