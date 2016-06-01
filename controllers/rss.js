@@ -97,8 +97,10 @@ function getChildrenFiles(parentId, token, feed) {
   console.log('getChildrenFiles', parentId);
   return request.get({ url: 'https://api.put.io/v2/files/list', qs: { oauth_token: token, parent_id: parentId }, json: true }).then(function(data) {
     return Promise.all(data.files.map(function(file) {
+      console.log(file.content_type);
       switch (file.content_type) {
-      case 'video/x-matroska':
+        case 'video/mp4':
+        case 'video/x-matroska':
         var downloadUrl = 'https://api.put.io/v2/files/' + file.id + '/download?oauth_token=' + token
         feed.addItem({
             title:          file.name,
