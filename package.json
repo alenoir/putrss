@@ -1,9 +1,9 @@
 {
-  "name": "hackathon-starter",
-  "version": "4.0.1",
+  "name": "PutRss",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sahat/hackathon-starter.git"
+    "url": "https://github.com/alenoir/putrss"
   },
   "scripts": {
     "start": "node app.js",
