@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --reporter spec --timeout 5000"
+    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec && codecov --token=43509386-bb6e-4cfe-a10b-ed7a4de72108"
   },
   "dependencies": {
     "async": "^2.0.0-rc.4",
@@ -63,6 +63,8 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "codecov": "^1.0.1",
+    "istanbul": "^0.4.5",
     "mocha": "^2.4.5",
     "nodemon": "^1.9.2",
     "supertest": "^1.2.0"
