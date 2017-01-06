@@ -59,7 +59,7 @@
     "tumblr.js": "^1.0.0",
     "twilio": "^3.3.0-edge",
     "twit": "^2.2.4",
-    "validator": "^5.2.0",
+    "validator": "^6.2.1",
     "yui": "^3.18.1"
   },
   "devDependencies": {
