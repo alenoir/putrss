@@ -19,9 +19,11 @@ exports.getFiles = (req, res, next) => {
     request.get({ url: 'https://api.put.io/v2/files/list', qs: { oauth_token: token.accessToken, parent_id: parentId }, json: true }).then(function(data) {
       var files = [];
       return Promise.each(data.files, function(file) {
+        console.log(data.files);
         switch (file.content_type) {
         case 'video/x-matroska':
         case 'video/mp4':
+        case 'video/x-msvideo':
           file.disabled = 'disabled';
           file.icon = 'fa-film';
           break;
@@ -101,6 +103,7 @@ function getChildrenFiles(parentId, token, feed) {
       switch (file.content_type) {
         case 'video/mp4':
         case 'video/x-matroska':
+        case 'video/x-msvideo':
         var downloadUrl = 'https://api.put.io/v2/files/' + file.id + '/download?oauth_token=' + token
         feed.addItem({
             title:          file.name,
